@@ -73,7 +73,9 @@ export default function AdminPage() {
     );
   }
 
-  const filtered = filter === "hepsi" ? reservations : reservations.filter((r) => r.status === filter);
+  const filtered = filter === "hepsi"
+    ? reservations.filter((r) => r.status !== "iptal")
+    : reservations.filter((r) => r.status === filter);
   const counts = {
     beklemede: reservations.filter((r) => r.status === "beklemede").length,
     onaylandi: reservations.filter((r) => r.status === "onaylandi").length,
