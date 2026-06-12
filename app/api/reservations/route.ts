@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getReservations, createReservation, isSlotAvailable, Slot } from "@/lib/reservations";
+import { sendReservationEmails } from "@/lib/email";
 
 export async function GET(req: NextRequest) {
   const adminKey = req.nextUrl.searchParams.get("key");
@@ -42,6 +43,8 @@ export async function POST(req: NextRequest) {
       guest_count: Number(guestCount) || 10,
       note: note || "",
     });
+
+    sendReservationEmails(reservation).catch(() => {});
 
     return NextResponse.json(reservation, { status: 201 });
   } catch {
