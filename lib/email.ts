@@ -22,10 +22,10 @@ export async function sendReservationEmails(r: Reservation) {
   const dateLabel = formatDate(r.date);
   const slotLabel = SLOT_LABELS[r.slot];
 
-  // Sana bildirim
+  // Sana bildirim (Resend free plan: sadece kayıtlı adrese gönderilebilir)
   await resend.emails.send({
     from: "Kafi Rezervasyon <onboarding@resend.dev>",
-    to: KAFI_EMAIL,
+    to: "rakuappdigital@gmail.com",
     subject: `Yeni Rezervasyon — ${r.name} / ${dateLabel}`,
     html: `
       <div style="font-family:sans-serif;max-width:480px;padding:24px">
@@ -46,24 +46,4 @@ export async function sendReservationEmails(r: Reservation) {
     `,
   });
 
-  // Müşteriye onay
-  await resend.emails.send({
-    from: "Kafi Coffee House <onboarding@resend.dev>",
-    to: r.email,
-    subject: "Rezervasyon Talebiniz Alındı — Kafi Coffee House",
-    html: `
-      <div style="font-family:sans-serif;max-width:480px;padding:24px">
-        <h2 style="color:#C8622A">Talebiniz Alındı</h2>
-        <p>Merhaba <strong>${r.name}</strong>,</p>
-        <p>Rezervasyon talebiniz başarıyla alınmıştır. En kısa sürede sizi arayarak onaylayacağız.</p>
-        <table style="width:100%;border-collapse:collapse;font-size:15px;margin:20px 0">
-          <tr><td style="padding:8px 0;color:#888">Tarih</td><td><strong>${dateLabel}</strong></td></tr>
-          <tr><td style="padding:8px 0;color:#888">Slot</td><td><strong>${slotLabel}</strong></td></tr>
-          <tr><td style="padding:8px 0;color:#888">Kişi Sayısı</td><td><strong>${r.guest_count}</strong></td></tr>
-        </table>
-        <p style="color:#888;font-size:13px">Sorularınız için: ${KAFI_EMAIL}</p>
-        <p style="color:#888;font-size:13px">@kaficoffeehouse</p>
-      </div>
-    `,
-  });
 }
