@@ -52,6 +52,11 @@ export async function createReservation(
   return rows[0] as Reservation;
 }
 
+export async function deleteReservation(id: string): Promise<void> {
+  const sql = getDb();
+  await sql`DELETE FROM reservations WHERE id = ${id}`;
+}
+
 export async function updateReservationStatus(id: string, status: Status): Promise<Reservation> {
   const sql = getDb();
   const rows = await sql`

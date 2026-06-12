@@ -45,6 +45,11 @@ export default function AdminPage() {
     fetchReservations();
   }
 
+  async function deleteReservation(id: string) {
+    await fetch(`/api/reservations/${id}?key=${ADMIN_KEY}`, { method: "DELETE" });
+    fetchReservations();
+  }
+
   if (!authed) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: "#F5EDD8" }}>
@@ -196,6 +201,13 @@ export default function AdminPage() {
                         Vazgeç
                       </button>
                     </div>
+                  )}
+                  {r.status === "iptal" && (
+                    <button onClick={() => deleteReservation(r.id)}
+                      className="text-xs px-3 py-1.5 rounded-full"
+                      style={{ backgroundColor: "#1a1a1a22", color: "#1a1a1a", fontFamily: "var(--font-inter)" }}>
+                      Sil
+                    </button>
                   )}
                 </div>
               </div>
