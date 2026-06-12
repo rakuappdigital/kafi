@@ -180,50 +180,48 @@ export default function ReservasyonPage() {
                   const isAvailable = state === "musait";
                   const isPending = state === "beklemede";
                   return (
-                    <div key={slot} className="flex flex-col gap-2">
-                      <button
-                        disabled={!isAvailable}
-                        onClick={() => { setSelectedSlot(slot); setStep(3); }}
-                        className="p-5 rounded-2xl text-left transition-all"
-                        style={{
-                          backgroundColor: "#EDE0C4",
-                          opacity: !isAvailable ? 0.5 : 1,
-                          cursor: !isAvailable ? "not-allowed" : "pointer",
-                          border: selectedSlot === slot ? "2px solid #C8622A" : "2px solid transparent",
-                        }}>
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <div className="font-medium text-lg mb-1" style={{ fontFamily: "var(--font-inter)" }}>
-                              {SLOT_LABELS[slot].label}
+                    <button key={slot}
+                      disabled={!isAvailable}
+                      onClick={() => { setSelectedSlot(slot); setStep(3); }}
+                      className="p-5 rounded-2xl text-left transition-all"
+                      style={{
+                        backgroundColor: "#EDE0C4",
+                        opacity: !isAvailable ? 0.55 : 1,
+                        cursor: !isAvailable ? "not-allowed" : "pointer",
+                        border: selectedSlot === slot ? "2px solid #C8622A" : "2px solid transparent",
+                      }}>
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <div className="font-medium text-lg mb-1" style={{ fontFamily: "var(--font-inter)" }}>
+                            {SLOT_LABELS[slot].label}
+                          </div>
+                          <div className="text-sm opacity-60" style={{ fontFamily: "var(--font-inter)" }}>
+                            {SLOT_LABELS[slot].time}
+                          </div>
+                          {isPending ? (
+                            <div className="flex items-center gap-1.5 mt-2">
+                              <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#E07840" }} />
+                              <span className="text-xs" style={{ fontFamily: "var(--font-inter)", color: "#E07840" }}>
+                                Bekleyen talep var —{" "}
+                                <span style={{ textDecoration: "underline" }}>kaficoffeehouse@gmail.com</span>
+                              </span>
                             </div>
-                            <div className="text-sm opacity-60" style={{ fontFamily: "var(--font-inter)" }}>
-                              {SLOT_LABELS[slot].time}
-                            </div>
+                          ) : (
                             <div className="text-xs opacity-40 mt-1" style={{ fontFamily: "var(--font-inter)" }}>
                               {SLOT_LABELS[slot].desc}
                             </div>
-                          </div>
-                          <div className="text-xs px-2 py-1 rounded-full mt-1"
-                            style={{
-                              backgroundColor: isAvailable ? "#C8622A22" : isPending ? "#E0784022" : "#1a1a1a22",
-                              color: isAvailable ? "#C8622A" : isPending ? "#E07840" : "#1a1a1a",
-                              fontFamily: "var(--font-inter)"
-                            }}>
-                            {isAvailable ? "Müsait" : isPending ? "Beklemede" : "Dolu"}
-                          </div>
+                          )}
                         </div>
-                      </button>
-                      {isPending && (
-                        <div className="px-4 py-3 rounded-xl text-sm leading-relaxed"
-                          style={{ backgroundColor: "#FFF8F0", color: "#9a5a1a", fontFamily: "var(--font-inter)", border: "1px solid #E0784033" }}>
-                          Bekleyen bir rezervasyon talebi var. Onaylanmamış olabilir —
-                          dilerseniz daha sonra tekrar deneyebilir ya da bize ulaşabilirsiniz:{" "}
-                          <a href="mailto:kaficoffeehouse@gmail.com" style={{ color: "#C8622A", textDecoration: "underline" }}>
-                            kaficoffeehouse@gmail.com
-                          </a>
+                        <div className="text-xs px-2 py-1 rounded-full mt-1"
+                          style={{
+                            backgroundColor: isAvailable ? "#C8622A22" : isPending ? "#E0784022" : "#1a1a1a22",
+                            color: isAvailable ? "#C8622A" : isPending ? "#E07840" : "#1a1a1a",
+                            fontFamily: "var(--font-inter)"
+                          }}>
+                          {isAvailable ? "Müsait" : isPending ? "Beklemede" : "Dolu"}
                         </div>
-                      )}
-                    </div>
+                      </div>
+                    </button>
                   );
                 })}
               </div>
