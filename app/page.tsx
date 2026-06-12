@@ -172,22 +172,32 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Sosyal medya */}
+          {/* Sosyal medya & İletişim */}
           <div>
             <p className="text-xs uppercase tracking-widest mb-4 opacity-40" style={{ fontFamily: "var(--font-inter)" }}>
-              sosyal medya
+              iletişim
             </p>
-            <a href="https://instagram.com/kaficoffeehouse" target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 opacity-70 hover:opacity-100 transition-opacity"
-              style={{ fontFamily: "var(--font-inter)" }}>
-              {/* Instagram logosu */}
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8622A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                <circle cx="12" cy="12" r="4"/>
-                <circle cx="17.5" cy="6.5" r="0.5" fill="#C8622A"/>
-              </svg>
-              <span className="text-sm" style={{ color: "#F5EDD8" }}>@kaficoffeehouse</span>
-            </a>
+            <div className="flex flex-col gap-3">
+              <a href="https://instagram.com/kaficoffeehouse" target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 opacity-70 hover:opacity-100 transition-opacity"
+                style={{ fontFamily: "var(--font-inter)" }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8622A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                  <circle cx="12" cy="12" r="4"/>
+                  <circle cx="17.5" cy="6.5" r="0.5" fill="#C8622A"/>
+                </svg>
+                <span className="text-sm" style={{ color: "#F5EDD8" }}>@kaficoffeehouse</span>
+              </a>
+              <a href="mailto:kaficoffeehouse@gmail.com"
+                className="inline-flex items-center gap-2 opacity-70 hover:opacity-100 transition-opacity"
+                style={{ fontFamily: "var(--font-inter)" }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8622A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="4" width="20" height="16" rx="2"/>
+                  <polyline points="2,4 12,13 22,4"/>
+                </svg>
+                <span className="text-sm" style={{ color: "#F5EDD8" }}>kaficoffeehouse@gmail.com</span>
+              </a>
+            </div>
           </div>
 
         </div>
