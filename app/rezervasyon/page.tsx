@@ -6,8 +6,8 @@ type Slot = "sabah" | "aksam";
 type SlotStatus = { sabah: boolean; aksam: boolean } | null;
 
 const SLOT_LABELS: Record<Slot, { label: string; time: string; desc: string }> = {
-  sabah: { label: "Sabah", time: "10:00 – 14:00", desc: "Kahvaltı ve öğle saatleri" },
-  aksam: { label: "Akşam", time: "17:00 – 22:00", desc: "Akşam etkinlikleri" },
+  sabah: { label: "Sabah", time: "10:00 – 16:00", desc: "Kahvaltı ve öğle saatleri" },
+  aksam: { label: "Akşam", time: "17:00 – 23:00", desc: "Akşam etkinlikleri" },
 };
 
 function formatDateTR(dateStr: string) {
