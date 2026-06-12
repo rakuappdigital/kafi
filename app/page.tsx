@@ -66,7 +66,7 @@ export default function Home() {
             </p>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <FeatureCard icon="☕" title="Specialty Coffee" desc="Single origin ve özenle hazırlanmış içecekler" />
+            <FeatureCard icon="☕" title="Özel Kahveler" desc="Single origin ve özenle hazırlanmış içecekler" />
             <FeatureCard icon="🌿" title="Sıcak Atmosfer" desc="Turuncu duvarlar, yeşil bitkiler, doğal ışık" />
             <FeatureCard icon="🥪" title="Ev Yapımı Lezzetler" desc="Taze sandviçler ve günlük tatlılar" />
             <FeatureCard icon="📅" title="Özel Etkinlik" desc="Günde 2 slot, tamamen size özel" />
