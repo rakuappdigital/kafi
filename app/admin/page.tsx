@@ -14,7 +14,7 @@ const STATUS_LABELS: Record<Status, { label: string; color: string }> = {
   iptal: { label: "İptal", color: "#9a2a2a" },
 };
 
-const ADMIN_KEY = "kafi2024";
+const ADMIN_KEY = "dogus@kafi@83";
 
 export default function AdminPage() {
   const [authed, setAuthed] = useState(false);
