@@ -136,10 +136,44 @@ export default function Home() {
         </Link>
       </section>
 
+      {/* İletişim & Konum */}
+      <section id="iletisim" className="py-20 px-6" style={{ backgroundColor: "#1a1a1a", color: "#F5EDD8" }}>
+        <div className="max-w-4xl mx-auto grid md:grid-cols-3 gap-10">
+          <div>
+            <p className="text-xs uppercase tracking-widest mb-4 opacity-40" style={{ fontFamily: "var(--font-inter)" }}>
+              konum
+            </p>
+            <p className="opacity-70 leading-relaxed text-sm" style={{ fontFamily: "var(--font-inter)", fontWeight: 300 }}>
+              {/* Adresini buraya yaz */}
+              İstanbul
+            </p>
+          </div>
+          <div>
+            <p className="text-xs uppercase tracking-widest mb-4 opacity-40" style={{ fontFamily: "var(--font-inter)" }}>
+              saatler
+            </p>
+            <div className="text-sm opacity-70 leading-relaxed" style={{ fontFamily: "var(--font-inter)", fontWeight: 300 }}>
+              <p>Sabah Slotu: 10:00 – 14:00</p>
+              <p>Akşam Slotu: 17:00 – 22:00</p>
+            </div>
+          </div>
+          <div>
+            <p className="text-xs uppercase tracking-widest mb-4 opacity-40" style={{ fontFamily: "var(--font-inter)" }}>
+              sosyal medya
+            </p>
+            <a href="https://instagram.com/kaficoffeehouse" target="_blank" rel="noopener noreferrer"
+              className="text-sm opacity-70 hover:opacity-100 transition-opacity"
+              style={{ fontFamily: "var(--font-inter)", color: "#C8622A" }}>
+              @kaficoffeehouse
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
-      <footer className="py-8 px-6 border-t text-center opacity-40 text-sm"
-        style={{ borderColor: "#C8622A33", fontFamily: "var(--font-inter)" }}>
-        © 2024 ka-fi coffee house · @kaficoffeehouse
+      <footer className="py-6 px-6 border-t text-center opacity-30 text-xs"
+        style={{ borderColor: "#C8622A33", fontFamily: "var(--font-inter)", backgroundColor: "#1a1a1a", color: "#F5EDD8" }}>
+        © 2024 ka-fi coffee house
       </footer>
     </main>
   );

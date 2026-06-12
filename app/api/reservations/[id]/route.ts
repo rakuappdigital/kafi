@@ -5,7 +5,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   const { id } = await params;
   const { status, key } = await req.json();
 
-  if (key !== process.env.ADMIN_KEY && key !== "kafi2024") {
+  if (key !== (process.env.ADMIN_KEY ?? "kafi2024")) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

@@ -8,7 +8,7 @@ import {
 
 export async function GET(req: NextRequest) {
   const adminKey = req.nextUrl.searchParams.get("key");
-  if (adminKey !== process.env.ADMIN_KEY && adminKey !== "kafi2024") {
+  if (adminKey !== (process.env.ADMIN_KEY ?? "kafi2024")) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   const reservations = readReservations();
