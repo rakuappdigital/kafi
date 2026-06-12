@@ -8,14 +8,9 @@ export default function Home() {
       {/* Nav */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4"
         style={{ backgroundColor: "rgba(245,237,216,0.92)", backdropFilter: "blur(8px)" }}>
-        <div>
-          <span className="text-2xl font-bold tracking-tight block leading-none" style={{ fontFamily: "var(--font-playfair)", color: "#C8622A" }}>
-            Kafi
-          </span>
-          <span className="text-xs uppercase tracking-widest opacity-40 leading-none" style={{ fontFamily: "var(--font-inter)" }}>
-            Coffee House
-          </span>
-        </div>
+        <Link href="/">
+          <Image src="/logo.jpeg" alt="Kafi Coffee House" width={52} height={52} className="rounded-xl" />
+        </Link>
         <div className="flex items-center gap-6 text-sm" style={{ fontFamily: "var(--font-inter)" }}>
           <a href="#hakkimizda" className="opacity-60 hover:opacity-100 transition-opacity">Hakkımızda</a>
           <a href="#galeri" className="opacity-60 hover:opacity-100 transition-opacity">Galeri</a>
@@ -34,13 +29,10 @@ export default function Home() {
           <Image src="/balkabagi.jpeg" alt="" fill className="object-cover" priority />
         </div>
         <div className="relative z-10 flex flex-col items-center">
-          <p className="text-sm uppercase tracking-widest mb-4 opacity-50" style={{ fontFamily: "var(--font-inter)" }}>
+          <Image src="/logo.jpeg" alt="Kafi Coffee House" width={160} height={160} className="rounded-3xl mb-2" />
+          <p className="text-sm uppercase tracking-widest mt-4 opacity-50" style={{ fontFamily: "var(--font-inter)" }}>
             coffee house
           </p>
-          <h1 className="text-8xl md:text-9xl font-medium leading-none"
-            style={{ fontFamily: "var(--font-playfair)", color: "#C8622A", letterSpacing: "-2px" }}>
-            Kafi
-          </h1>
           <p className="text-lg md:text-xl opacity-60 max-w-md mb-10 mt-6 leading-relaxed" style={{ fontFamily: "var(--font-inter)", fontWeight: 300 }}>
             Sıcak bir köşe, özel anlar için.<br />Etkinliklerinizi bizimle planlayın.
           </p>
