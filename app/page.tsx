@@ -146,7 +146,7 @@ export default function Home() {
             </p>
             {/* ADRES: Aşağıdaki href içine Google Maps linkini, p içine tam adresi yaz */}
             <a
-              href="https://maps.app.goo.gl/ADRESINIZI_BURAYA_EKLEYIN"
+              href="https://maps.google.com/?q=Kafi+Coffee+House,+19+Mayıs,+Oral+Sk.+No:11+D:3,+34736+Kadıköy/İstanbul"
               target="_blank"
               rel="noopener noreferrer"
               className="group flex items-start gap-3 opacity-70 hover:opacity-100 transition-opacity"
@@ -156,8 +156,7 @@ export default function Home() {
                 <circle cx="12" cy="10" r="3"/>
               </svg>
               <span className="text-sm leading-relaxed" style={{ fontFamily: "var(--font-inter)", fontWeight: 300 }}>
-                {/* TAM ADRESİ BURAYA YAZ */}
-                Kafi Coffee House, İstanbul
+                Oral Sk. No:11 D:3<br />19 Mayıs, Kadıköy<br />İstanbul
               </span>
             </a>
           </div>
