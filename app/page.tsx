@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -22,8 +23,13 @@ export default function Home() {
       </nav>
 
       {/* Hero */}
-      <section className="min-h-screen flex flex-col items-center justify-center text-center px-6 pt-20"
+      <section className="min-h-screen flex flex-col items-center justify-center text-center px-6 pt-20 relative overflow-hidden"
         style={{ background: "linear-gradient(160deg, #F5EDD8 60%, #EDE0C4 100%)" }}>
+        {/* Arka plan görseli */}
+        <div className="absolute inset-0 opacity-10">
+          <Image src="/balkabagi.jpeg" alt="" fill className="object-cover" priority />
+        </div>
+        <div className="relative z-10 flex flex-col items-center">
         <p className="text-sm uppercase tracking-widest mb-4 opacity-50" style={{ fontFamily: "var(--font-inter)" }}>
           coffee house
         </p>
@@ -41,6 +47,7 @@ export default function Home() {
           <span>→</span>
         </Link>
 
+        </div>
         {/* Scroll hint */}
         <div className="absolute bottom-10 flex flex-col items-center gap-2 opacity-30">
           <span className="text-xs" style={{ fontFamily: "var(--font-inter)" }}>aşağı kaydır</span>
@@ -85,14 +92,26 @@ export default function Home() {
           <h2 className="text-3xl font-medium mb-10 text-center" style={{ fontFamily: "var(--font-playfair)" }}>
             ka-fi'den kareler
           </h2>
-          {/* Placeholder grid — görseller eklenince buraya gelecek */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {["Sandviç & Çay", "Berry Limonata", "İç Mekan", "Açık Hava", "Kurabiye", "Matcha Latte"].map((label, i) => (
-              <div key={i} className="aspect-square rounded-2xl flex items-end p-4"
-                style={{ backgroundColor: i % 2 === 0 ? "#C8622A" : "#1a1a1a", opacity: 0.85 }}>
-                <span className="text-white text-sm" style={{ fontFamily: "var(--font-inter)", fontWeight: 300 }}>
-                  {label}
-                </span>
+            {[
+              { src: "/sandvic-cay.jpeg", alt: "Sandviç & Çay" },
+              { src: "/berry.jpeg", alt: "Berry Limonata" },
+              { src: "/sandvic-ic.jpeg", alt: "İç Mekan" },
+              { src: "/acik-hava.jpeg", alt: "Açık Hava" },
+              { src: "/kurabiye.jpeg", alt: "Kurabiye" },
+              { src: "/matcha.jpeg", alt: "Matcha Latte" },
+              { src: "/latte.jpeg", alt: "Latte" },
+              { src: "/balkabagi.jpeg", alt: "Özel Fincan" },
+              { src: "/kafi-kupa.jpeg", alt: "ka-fi" },
+            ].map((item) => (
+              <div key={item.src} className="aspect-square rounded-2xl overflow-hidden relative">
+                <Image
+                  src={item.src}
+                  alt={item.alt}
+                  fill
+                  className="object-cover hover:scale-105 transition-transform duration-500"
+                  sizes="(max-width: 768px) 50vw, 33vw"
+                />
               </div>
             ))}
           </div>
