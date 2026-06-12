@@ -22,13 +22,22 @@ export async function getReservations(): Promise<Reservation[]> {
   return rows as Reservation[];
 }
 
-export async function isSlotAvailable(date: string, slot: Slot): Promise<boolean> {
+export type SlotState = "musait" | "beklemede" | "dolu";
+
+export async function getSlotState(date: string, slot: Slot): Promise<SlotState> {
   const sql = getDb();
   const rows = await sql`
-    SELECT id FROM reservations
+    SELECT status FROM reservations
     WHERE date = ${date} AND slot = ${slot} AND status != 'iptal'
+    LIMIT 1
   `;
-  return rows.length === 0;
+  if (rows.length === 0) return "musait";
+  return rows[0].status === "onaylandi" ? "dolu" : "beklemede";
+}
+
+export async function isSlotAvailable(date: string, slot: Slot): Promise<boolean> {
+  const state = await getSlotState(date, slot);
+  return state === "musait";
 }
 
 export async function createReservation(

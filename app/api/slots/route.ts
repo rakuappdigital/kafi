@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { isSlotAvailable } from "@/lib/reservations";
+import { getSlotState } from "@/lib/reservations";
 
 export async function GET(req: NextRequest) {
   const date = req.nextUrl.searchParams.get("date");
@@ -7,8 +7,8 @@ export async function GET(req: NextRequest) {
 
   try {
     const [sabah, aksam] = await Promise.all([
-      isSlotAvailable(date, "sabah"),
-      isSlotAvailable(date, "aksam"),
+      getSlotState(date, "sabah"),
+      getSlotState(date, "aksam"),
     ]);
     return NextResponse.json({ sabah, aksam });
   } catch {

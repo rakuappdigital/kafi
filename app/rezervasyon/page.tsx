@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 type Slot = "sabah" | "aksam";
-type SlotStatus = { sabah: boolean; aksam: boolean } | null;
+type SlotState = "musait" | "beklemede" | "dolu";
+type SlotStatus = { sabah: SlotState; aksam: SlotState } | null;
 
 const SLOT_LABELS: Record<Slot, { label: string; time: string; desc: string }> = {
   sabah: { label: "Sabah", time: "10:00 – 16:00", desc: "Kahvaltı ve öğle saatleri" },
@@ -175,40 +176,54 @@ export default function ReservasyonPage() {
             ) : (
               <div className="flex flex-col gap-3">
                 {(["sabah", "aksam"] as Slot[]).map((slot) => {
-                  const available = slotStatus?.[slot] ?? true;
+                  const state: SlotState = slotStatus?.[slot] ?? "musait";
+                  const isAvailable = state === "musait";
+                  const isPending = state === "beklemede";
                   return (
-                    <button key={slot}
-                      disabled={!available}
-                      onClick={() => { setSelectedSlot(slot); setStep(3); }}
-                      className="p-5 rounded-2xl text-left transition-all"
-                      style={{
-                        backgroundColor: !available ? "#EDE0C4" : selectedSlot === slot ? "#C8622A" : "#EDE0C4",
-                        opacity: !available ? 0.4 : 1,
-                        cursor: !available ? "not-allowed" : "pointer",
-                        border: selectedSlot === slot ? "2px solid #C8622A" : "2px solid transparent",
-                      }}>
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <div className="font-medium text-lg mb-1" style={{ fontFamily: "var(--font-inter)" }}>
-                            {SLOT_LABELS[slot].label}
+                    <div key={slot} className="flex flex-col gap-2">
+                      <button
+                        disabled={!isAvailable}
+                        onClick={() => { setSelectedSlot(slot); setStep(3); }}
+                        className="p-5 rounded-2xl text-left transition-all"
+                        style={{
+                          backgroundColor: "#EDE0C4",
+                          opacity: !isAvailable ? 0.5 : 1,
+                          cursor: !isAvailable ? "not-allowed" : "pointer",
+                          border: selectedSlot === slot ? "2px solid #C8622A" : "2px solid transparent",
+                        }}>
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <div className="font-medium text-lg mb-1" style={{ fontFamily: "var(--font-inter)" }}>
+                              {SLOT_LABELS[slot].label}
+                            </div>
+                            <div className="text-sm opacity-60" style={{ fontFamily: "var(--font-inter)" }}>
+                              {SLOT_LABELS[slot].time}
+                            </div>
+                            <div className="text-xs opacity-40 mt-1" style={{ fontFamily: "var(--font-inter)" }}>
+                              {SLOT_LABELS[slot].desc}
+                            </div>
                           </div>
-                          <div className="text-sm opacity-60" style={{ fontFamily: "var(--font-inter)" }}>
-                            {SLOT_LABELS[slot].time}
-                          </div>
-                          <div className="text-xs opacity-40 mt-1" style={{ fontFamily: "var(--font-inter)" }}>
-                            {SLOT_LABELS[slot].desc}
+                          <div className="text-xs px-2 py-1 rounded-full mt-1"
+                            style={{
+                              backgroundColor: isAvailable ? "#C8622A22" : isPending ? "#E0784022" : "#1a1a1a22",
+                              color: isAvailable ? "#C8622A" : isPending ? "#E07840" : "#1a1a1a",
+                              fontFamily: "var(--font-inter)"
+                            }}>
+                            {isAvailable ? "Müsait" : isPending ? "Beklemede" : "Dolu"}
                           </div>
                         </div>
-                        <div className="text-xs px-2 py-1 rounded-full mt-1"
-                          style={{
-                            backgroundColor: available ? "#C8622A22" : "#1a1a1a22",
-                            color: available ? "#C8622A" : "#1a1a1a",
-                            fontFamily: "var(--font-inter)"
-                          }}>
-                          {available ? "Müsait" : "Dolu"}
+                      </button>
+                      {isPending && (
+                        <div className="px-4 py-3 rounded-xl text-sm leading-relaxed"
+                          style={{ backgroundColor: "#FFF8F0", color: "#9a5a1a", fontFamily: "var(--font-inter)", border: "1px solid #E0784033" }}>
+                          Bekleyen bir rezervasyon talebi var. Onaylanmamış olabilir —
+                          dilerseniz daha sonra tekrar deneyebilir ya da bize ulaşabilirsiniz:{" "}
+                          <a href="mailto:kaficoffeehouse@gmail.com" style={{ color: "#C8622A", textDecoration: "underline" }}>
+                            kaficoffeehouse@gmail.com
+                          </a>
                         </div>
-                      </div>
-                    </button>
+                      )}
+                    </div>
                   );
                 })}
               </div>
