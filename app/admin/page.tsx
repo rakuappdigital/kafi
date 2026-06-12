@@ -23,6 +23,7 @@ export default function AdminPage() {
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState<Status | "hepsi">("hepsi");
+  const [confirmCancel, setConfirmCancel] = useState<string | null>(null);
 
   const fetchReservations = useCallback(async () => {
     setLoading(true);
@@ -173,12 +174,26 @@ export default function AdminPage() {
                       Beklemeye Al
                     </button>
                   )}
-                  {r.status !== "iptal" && (
-                    <button onClick={() => updateStatus(r.id, "iptal")}
+                  {r.status !== "iptal" && confirmCancel !== r.id && (
+                    <button onClick={() => setConfirmCancel(r.id)}
                       className="text-xs px-3 py-1.5 rounded-full"
-                      style={{ backgroundColor: "#9a2a2a", color: "white", fontFamily: "var(--font-inter)" }}>
+                      style={{ backgroundColor: "#9a2a2a22", color: "#9a2a2a", fontFamily: "var(--font-inter)" }}>
                       İptal Et
                     </button>
+                  )}
+                  {confirmCancel === r.id && (
+                    <div className="flex items-center gap-2">
+                      <button onClick={() => { updateStatus(r.id, "iptal"); setConfirmCancel(null); }}
+                        className="text-xs px-3 py-1.5 rounded-full"
+                        style={{ backgroundColor: "#9a2a2a", color: "white", fontFamily: "var(--font-inter)" }}>
+                        Kesin İptal Et
+                      </button>
+                      <button onClick={() => setConfirmCancel(null)}
+                        className="text-xs px-3 py-1.5 rounded-full"
+                        style={{ backgroundColor: "#EDE0C4", color: "#1a1a1a", fontFamily: "var(--font-inter)" }}>
+                        Vazgeç
+                      </button>
+                    </div>
                   )}
                 </div>
               </div>
