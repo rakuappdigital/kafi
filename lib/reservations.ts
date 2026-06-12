@@ -1,53 +1,60 @@
-import fs from "fs";
-import path from "path";
+import { getSupabase } from "./supabase";
 
 export type Slot = "sabah" | "aksam";
 export type Status = "beklemede" | "onaylandi" | "iptal";
 
 export interface Reservation {
   id: string;
-  date: string; // YYYY-MM-DD
+  date: string;
   slot: Slot;
   name: string;
   phone: string;
   email: string;
-  guestCount: number;
+  guest_count: number;
   note: string;
   status: Status;
-  createdAt: string;
+  created_at: string;
 }
 
-const DATA_FILE = path.join(process.cwd(), "data", "reservations.json");
-
-export function readReservations(): Reservation[] {
-  try {
-    const raw = fs.readFileSync(DATA_FILE, "utf-8");
-    return JSON.parse(raw);
-  } catch {
-    return [];
-  }
+export async function getReservations(): Promise<Reservation[]> {
+  const { data, error } = await getSupabase()
+    .from("reservations")
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return data ?? [];
 }
 
-export function writeReservations(reservations: Reservation[]): void {
-  fs.writeFileSync(DATA_FILE, JSON.stringify(reservations, null, 2));
+export async function isSlotAvailable(date: string, slot: Slot): Promise<boolean> {
+  const { data, error } = await getSupabase()
+    .from("reservations")
+    .select("id")
+    .eq("date", date)
+    .eq("slot", slot)
+    .neq("status", "iptal");
+  if (error) throw error;
+  return (data ?? []).length === 0;
 }
 
-export function isSlotAvailable(date: string, slot: Slot): boolean {
-  const reservations = readReservations();
-  return !reservations.some(
-    (r) => r.date === date && r.slot === slot && r.status !== "iptal"
-  );
+export async function createReservation(
+  data: Omit<Reservation, "id" | "status" | "created_at">
+): Promise<Reservation> {
+  const { data: created, error } = await getSupabase()
+    .from("reservations")
+    .insert([{ ...data, status: "beklemede" }])
+    .select()
+    .single();
+  if (error) throw error;
+  return created;
 }
 
-export function createReservation(data: Omit<Reservation, "id" | "status" | "createdAt">): Reservation {
-  const reservations = readReservations();
-  const reservation: Reservation = {
-    ...data,
-    id: Date.now().toString(),
-    status: "beklemede",
-    createdAt: new Date().toISOString(),
-  };
-  reservations.push(reservation);
-  writeReservations(reservations);
-  return reservation;
+export async function updateReservationStatus(id: string, status: Status): Promise<Reservation> {
+  const { data, error } = await getSupabase()
+    .from("reservations")
+    .update({ status })
+    .eq("id", id)
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
 }

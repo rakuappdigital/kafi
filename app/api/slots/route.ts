@@ -5,8 +5,13 @@ export async function GET(req: NextRequest) {
   const date = req.nextUrl.searchParams.get("date");
   if (!date) return NextResponse.json({ error: "date required" }, { status: 400 });
 
-  return NextResponse.json({
-    sabah: isSlotAvailable(date, "sabah"),
-    aksam: isSlotAvailable(date, "aksam"),
-  });
+  try {
+    const [sabah, aksam] = await Promise.all([
+      isSlotAvailable(date, "sabah"),
+      isSlotAvailable(date, "aksam"),
+    ]);
+    return NextResponse.json({ sabah, aksam });
+  } catch {
+    return NextResponse.json({ error: "Sunucu hatası" }, { status: 500 });
+  }
 }

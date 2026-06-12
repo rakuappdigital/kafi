@@ -1,41 +1,50 @@
 import { NextRequest, NextResponse } from "next/server";
-import {
-  readReservations,
-  createReservation,
-  isSlotAvailable,
-  Slot,
-} from "@/lib/reservations";
+import { getReservations, createReservation, isSlotAvailable, Slot } from "@/lib/reservations";
 
 export async function GET(req: NextRequest) {
   const adminKey = req.nextUrl.searchParams.get("key");
   if (adminKey !== (process.env.ADMIN_KEY ?? "kafi2024")) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const reservations = readReservations();
-  return NextResponse.json(reservations.sort((a, b) => b.createdAt.localeCompare(a.createdAt)));
+  try {
+    const reservations = await getReservations();
+    return NextResponse.json(reservations);
+  } catch {
+    return NextResponse.json({ error: "Sunucu hatası" }, { status: 500 });
+  }
 }
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const { date, slot, name, phone, email, guestCount, note } = body;
 
-  if (!date || !slot || !name || !phone) {
+  if (!date || !slot || !name || !phone || !email) {
     return NextResponse.json({ error: "Zorunlu alanlar eksik" }, { status: 400 });
   }
 
-  if (!isSlotAvailable(date, slot as Slot)) {
-    return NextResponse.json({ error: "Bu slot dolu" }, { status: 409 });
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return NextResponse.json({ error: "Geçerli bir e-posta adresi girin" }, { status: 400 });
   }
 
-  const reservation = createReservation({
-    date,
-    slot: slot as Slot,
-    name,
-    phone,
-    email: email || "",
-    guestCount: Number(guestCount) || 1,
-    note: note || "",
-  });
+  try {
+    const available = await isSlotAvailable(date, slot as Slot);
+    if (!available) {
+      return NextResponse.json({ error: "Bu slot dolu" }, { status: 409 });
+    }
 
-  return NextResponse.json(reservation, { status: 201 });
+    const reservation = await createReservation({
+      date,
+      slot: slot as Slot,
+      name,
+      phone,
+      email,
+      guest_count: Number(guestCount) || 10,
+      note: note || "",
+    });
+
+    return NextResponse.json(reservation, { status: 201 });
+  } catch {
+    return NextResponse.json({ error: "Sunucu hatası" }, { status: 500 });
+  }
 }

@@ -32,7 +32,7 @@ export default function ReservasyonPage() {
   const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
   const [slotStatus, setSlotStatus] = useState<SlotStatus>(null);
   const [loadingSlots, setLoadingSlots] = useState(false);
-  const [form, setForm] = useState({ name: "", phone: "", email: "", guestCount: "2", note: "" });
+  const [form, setForm] = useState({ name: "", phone: "", email: "", guestCount: "10", note: "" });
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
@@ -236,8 +236,8 @@ export default function ReservasyonPage() {
                 onChange={(v) => setForm((f) => ({ ...f, name: v }))} placeholder="Adınız" required />
               <Field label="Telefon *" value={form.phone} type="tel"
                 onChange={(v) => setForm((f) => ({ ...f, phone: v }))} placeholder="05xx xxx xx xx" required />
-              <Field label="E-posta" value={form.email} type="email"
-                onChange={(v) => setForm((f) => ({ ...f, email: v }))} placeholder="ornek@mail.com" />
+              <Field label="E-posta *" value={form.email} type="email"
+                onChange={(v) => setForm((f) => ({ ...f, email: v }))} placeholder="ornek@mail.com" required />
               <div>
                 <label className="block text-sm mb-2 opacity-60" style={{ fontFamily: "var(--font-inter)" }}>
                   Kişi Sayısı
@@ -246,7 +246,7 @@ export default function ReservasyonPage() {
                   onChange={(e) => setForm((f) => ({ ...f, guestCount: e.target.value }))}
                   className="w-full px-4 py-3 rounded-xl outline-none"
                   style={{ backgroundColor: "#EDE0C4", fontFamily: "var(--font-inter)", border: "none" }}>
-                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
+                  {[10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map((n) => (
                     <option key={n} value={n}>{n} kişi</option>
                   ))}
                 </select>
@@ -270,7 +270,7 @@ export default function ReservasyonPage() {
               </div>
             )}
 
-            <button type="submit" disabled={submitting || !form.name || !form.phone}
+            <button type="submit" disabled={submitting || !form.name || !form.phone || !form.email}
               className="w-full mt-6 py-4 rounded-full text-white font-medium transition-all hover:opacity-90 disabled:opacity-40"
               style={{ backgroundColor: "#C8622A", fontFamily: "var(--font-inter)" }}>
               {submitting ? "Gönderiliyor..." : "Rezervasyon Yap"}

@@ -65,7 +65,7 @@ export default function Home() {
               hakkımızda
             </p>
             <h2 className="text-4xl font-medium mb-6 leading-tight" style={{ fontFamily: "var(--font-playfair)" }}>
-              Her yudum bir hikaye
+              Özel Etkinlikleriniz İçin: Kafi
             </h2>
             <p className="opacity-60 leading-relaxed" style={{ fontFamily: "var(--font-inter)", fontWeight: 300 }}>
               Kafi, özel etkinlikleriniz, küçük toplantılarınız veya sadece birlikte vakit geçirmek
