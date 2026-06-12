@@ -232,9 +232,9 @@ export default function ReservasyonPage() {
             </p>
 
             <div className="flex flex-col gap-4">
-              <Field label="Ad Soyad *" value={form.name}
-                onChange={(v) => setForm((f) => ({ ...f, name: v }))} placeholder="Adınız" required />
-              <Field label="Telefon *" value={form.phone} type="tel"
+              <Field label="Ad Soyad / Organizasyon *" value={form.name}
+                onChange={(v) => setForm((f) => ({ ...f, name: v }))} placeholder="Adınız veya organizasyon adı" required />
+              <Field label="Cep Telefonu *" value={form.phone} type="tel"
                 onChange={(v) => setForm((f) => ({ ...f, phone: v }))} placeholder="05xx xxx xx xx" required />
               <Field label="E-posta *" value={form.email} type="email"
                 onChange={(v) => setForm((f) => ({ ...f, email: v }))} placeholder="ornek@mail.com" required />
