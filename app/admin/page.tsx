@@ -19,6 +19,7 @@ const ADMIN_KEY = "dogus@kafi@83";
 export default function AdminPage() {
   const [authed, setAuthed] = useState(false);
   const [password, setPassword] = useState("");
+  const [tried, setTried] = useState(false);
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState<Status | "hepsi">("hepsi");
@@ -52,16 +53,16 @@ export default function AdminPage() {
           </h1>
           <input type="password" value={password}
             onChange={(e) => setPassword(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && password === ADMIN_KEY && setAuthed(true)}
+            onKeyDown={(e) => { if (e.key === "Enter") { setTried(true); if (password === ADMIN_KEY) setAuthed(true); } }}
             placeholder="Şifre"
             className="w-full px-4 py-3 rounded-xl mb-4 outline-none"
             style={{ backgroundColor: "#F5EDD8", fontFamily: "var(--font-inter)" }} />
-          <button onClick={() => password === ADMIN_KEY && setAuthed(true)}
+          <button onClick={() => { setTried(true); if (password === ADMIN_KEY) setAuthed(true); }}
             className="w-full py-3 rounded-full text-white"
             style={{ backgroundColor: "#C8622A", fontFamily: "var(--font-inter)" }}>
             Giriş
           </button>
-          {password && password !== ADMIN_KEY && (
+          {tried && password !== ADMIN_KEY && (
             <p className="text-sm text-center mt-3 opacity-50" style={{ fontFamily: "var(--font-inter)" }}>
               Yanlış şifre
             </p>
