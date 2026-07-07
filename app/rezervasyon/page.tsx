@@ -109,7 +109,7 @@ export default function ReservasyonPage() {
           {formatDateTR(selectedDate)} · {selectedSlot && SLOT_LABELS[selectedSlot].label} ({selectedSlot && SLOT_LABELS[selectedSlot].time})
         </p>
         <p className="opacity-50 text-sm mb-8" style={{ fontFamily: "var(--font-inter)" }}>
-          En kısa sürede onay için sizi arayacağız.
+          Size rezervasyon onayı için maille en kısa sürede ulaşacağız. Lütfen mail kutunuzu kontrol etmeyi unutmayın; aksi halde rezervasyonunuz geçerli olmayacaktır.
         </p>
         <Link href="/"
           className="px-6 py-3 rounded-full text-white"
