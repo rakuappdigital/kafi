@@ -28,7 +28,7 @@ function getNext14Days() {
 }
 
 function pricePerGuest(guestCount: number) {
-  return guestCount < 15 ? 700 : 600;
+  return guestCount <= 15 ? 700 : 600;
 }
 
 export default function ReservasyonPage() {
@@ -263,7 +263,7 @@ export default function ReservasyonPage() {
                   onChange={(e) => setForm((f) => ({ ...f, guestCount: e.target.value }))}
                   className="w-full px-4 py-3 rounded-xl outline-none"
                   style={{ backgroundColor: "#EDE0C4", fontFamily: "var(--font-inter)", border: "none" }}>
-                  {[10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map((n) => (
+                  {Array.from({ length: 21 }, (_, i) => i + 10).map((n) => (
                     <option key={n} value={n}>{n} kişi</option>
                   ))}
                 </select>
@@ -273,7 +273,7 @@ export default function ReservasyonPage() {
                     {pricePerGuest(Number(form.guestCount)) * Number(form.guestCount)}₺
                   </span>
                   <div className="text-xs opacity-50 mt-0.5">
-                    10-14 kişi: 700₺/kişi · 15+ kişi: 600₺/kişi
+                    10-15 kişi: 700₺/kişi · 16-30 kişi: 600₺/kişi
                   </div>
                 </div>
               </div>
