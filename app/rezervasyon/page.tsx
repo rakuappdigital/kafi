@@ -16,13 +16,21 @@ function formatDateTR(dateStr: string) {
   return d.toLocaleDateString("tr-TR", { weekday: "long", day: "numeric", month: "long" });
 }
 
-function getNext14Days() {
-  const days: string[] = [];
+function getMonthLabel(monthOffset: number) {
   const today = new Date();
-  for (let i = 1; i <= 14; i++) {
-    const d = new Date(today);
-    d.setDate(today.getDate() + i);
-    days.push(d.toISOString().split("T")[0]);
+  const d = new Date(today.getFullYear(), today.getMonth() + monthOffset, 1);
+  return d.toLocaleDateString("tr-TR", { month: "long" });
+}
+
+function getMonthDays(monthOffset: number) {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth() + monthOffset;
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const startDay = monthOffset === 0 ? today.getDate() + 1 : 1;
+  const days: string[] = [];
+  for (let day = startDay; day <= daysInMonth; day++) {
+    days.push(new Date(year, month, day).toISOString().split("T")[0]);
   }
   return days;
 }
@@ -33,6 +41,7 @@ function pricePerGuest(guestCount: number) {
 
 export default function ReservasyonPage() {
   const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [selectedMonth, setSelectedMonth] = useState<0 | 1>(0);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
   const [slotStatus, setSlotStatus] = useState<SlotStatus>(null);
@@ -42,7 +51,7 @@ export default function ReservasyonPage() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  const days = getNext14Days();
+  const days = getMonthDays(selectedMonth);
 
   useEffect(() => {
     if (!selectedDate) return;
@@ -137,9 +146,23 @@ export default function ReservasyonPage() {
         {/* Step 1: Date */}
         {step === 1 && (
           <div>
-            <h2 className="text-2xl font-medium mb-6" style={{ fontFamily: "var(--font-playfair)" }}>
+            <h2 className="text-2xl font-medium mb-4" style={{ fontFamily: "var(--font-playfair)" }}>
               Hangi gün?
             </h2>
+            <div className="flex gap-2 mb-6">
+              {([0, 1] as const).map((offset) => (
+                <button key={offset}
+                  onClick={() => setSelectedMonth(offset)}
+                  className="px-5 py-2 rounded-full text-sm font-medium capitalize transition-all"
+                  style={{
+                    backgroundColor: selectedMonth === offset ? "#C8622A" : "#EDE0C4",
+                    color: selectedMonth === offset ? "white" : "#1a1a1a",
+                    fontFamily: "var(--font-inter)",
+                  }}>
+                  {getMonthLabel(offset)}
+                </button>
+              ))}
+            </div>
             <div className="grid grid-cols-2 gap-2">
               {days.map((day) => (
                 <button key={day}
