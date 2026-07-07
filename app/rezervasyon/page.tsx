@@ -50,8 +50,18 @@ export default function ReservasyonPage() {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [monthSlotStatus, setMonthSlotStatus] = useState<Record<string, SlotStatus>>({});
 
   const days = getMonthDays(selectedMonth);
+
+  useEffect(() => {
+    if (days.length === 0) return;
+    fetch(`/api/slots/range?start=${days[0]}&end=${days[days.length - 1]}`)
+      .then((r) => r.json())
+      .then((data) => setMonthSlotStatus(data))
+      .catch(() => setMonthSlotStatus({}));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedMonth]);
 
   useEffect(() => {
     if (!selectedDate) return;
@@ -164,22 +174,44 @@ export default function ReservasyonPage() {
               ))}
             </div>
             <div className="grid grid-cols-2 gap-2">
-              {days.map((day) => (
-                <button key={day}
-                  onClick={() => { setSelectedDate(day); setStep(2); }}
-                  className="p-4 rounded-xl text-left transition-all hover:scale-[1.02]"
-                  style={{
-                    backgroundColor: selectedDate === day ? "#C8622A" : "#EDE0C4",
-                    color: selectedDate === day ? "white" : "#1a1a1a",
-                  }}>
-                  <div className="text-xs opacity-60 mb-1" style={{ fontFamily: "var(--font-inter)" }}>
-                    {new Date(day + "T00:00:00").toLocaleDateString("tr-TR", { weekday: "long" })}
-                  </div>
-                  <div className="font-medium" style={{ fontFamily: "var(--font-inter)" }}>
-                    {new Date(day + "T00:00:00").toLocaleDateString("tr-TR", { day: "numeric", month: "long" })}
-                  </div>
-                </button>
-              ))}
+              {days.map((day) => {
+                const dayStatus = monthSlotStatus[day];
+                const sabahDolu = dayStatus?.sabah === "dolu";
+                const aksamDolu = dayStatus?.aksam === "dolu";
+                const bothFull = sabahDolu && aksamDolu;
+                const oneFull = (sabahDolu || aksamDolu) && !bothFull;
+                const isSelected = selectedDate === day;
+                return (
+                  <button key={day}
+                    onClick={() => { setSelectedDate(day); setStep(2); }}
+                    className="relative overflow-hidden p-4 rounded-xl text-left transition-all hover:scale-[1.02]"
+                    style={{
+                      backgroundColor: isSelected ? "#C8622A" : "#EDE0C4",
+                      color: isSelected ? "white" : "#1a1a1a",
+                    }}>
+                    {!isSelected && (bothFull || oneFull) && (
+                      <div className="absolute inset-0 pointer-events-none" style={{
+                        background: bothFull
+                          ? "rgba(200,98,42,0.55)"
+                          : "linear-gradient(135deg, rgba(200,98,42,0.55) 0%, rgba(200,98,42,0.55) 50%, transparent 50%, transparent 100%)",
+                      }} />
+                    )}
+                    <div className="relative">
+                      <div className="text-xs opacity-60 mb-1" style={{ fontFamily: "var(--font-inter)" }}>
+                        {new Date(day + "T00:00:00").toLocaleDateString("tr-TR", { weekday: "long" })}
+                      </div>
+                      <div className="font-medium" style={{ fontFamily: "var(--font-inter)" }}>
+                        {new Date(day + "T00:00:00").toLocaleDateString("tr-TR", { day: "numeric", month: "long" })}
+                      </div>
+                      {!isSelected && (bothFull || oneFull) && (
+                        <div className="text-[10px] font-medium mt-1" style={{ color: "#C8622A" }}>
+                          {bothFull ? "Tüm slotlar dolu" : `${sabahDolu ? "Sabah" : "Akşam"} slotu dolu`}
+                        </div>
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}
@@ -327,22 +359,32 @@ export default function ReservasyonPage() {
           </form>
         )}
 
-        <div className="mt-10 p-4 rounded-xl text-sm opacity-60 flex flex-col gap-2"
+        <div className="mt-10 p-4 rounded-xl text-sm opacity-60 flex flex-col gap-3"
           style={{ backgroundColor: "#EDE0C4", fontFamily: "var(--font-inter)" }}>
           <p>
-            Seçtiğiniz slotta bekleyen talep görünüyorsa daha sonra tekrar deneyebilir ya da{" "}
-            <a href="mailto:kaficoffeehouse@gmail.com" className="underline" style={{ color: "#C8622A" }}>
-              kaficoffeehouse@gmail.com
-            </a>{" "}
-            adresinden bize ulaşıp bilgi alabilirsiniz.
+            Seçtiğiniz slotta bekleyen talep görünüyorsa daha sonra tekrar deneyebilir ya da bize ulaşıp bilgi alabilirsiniz.
           </p>
           <p>
-            Rezervasyonla ilgili sorularınız için bize{" "}
-            <a href="mailto:kaficoffeehouse@gmail.com" className="underline" style={{ color: "#C8622A" }}>
-              kaficoffeehouse@gmail.com
-            </a>{" "}
-            adresinden ulaşabilirsiniz.
+            Rezervasyonla ilgili sorularınız için bize ulaşabilirsiniz.
           </p>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-1" style={{ borderTop: "1px solid #C8622A22" }}>
+            <span className="text-xs uppercase tracking-widest opacity-60">İletişim:</span>
+            <a href="mailto:kaficoffeehouse@gmail.com"
+              className="inline-flex items-center gap-1.5 opacity-90 hover:opacity-100 transition-opacity"
+              style={{ color: "#C8622A" }}>
+              kaficoffeehouse@gmail.com
+            </a>
+            <a href="https://instagram.com/kaficoffeehouse" target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 opacity-90 hover:opacity-100 transition-opacity"
+              style={{ color: "#C8622A" }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C8622A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                <circle cx="12" cy="12" r="4"/>
+                <circle cx="17.5" cy="6.5" r="0.5" fill="#C8622A"/>
+              </svg>
+              kaficoffeehouse
+            </a>
+          </div>
         </div>
       </div>
     </div>

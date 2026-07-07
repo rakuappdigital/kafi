@@ -40,6 +40,24 @@ export async function isSlotAvailable(date: string, slot: Slot): Promise<boolean
   return state === "musait";
 }
 
+export async function getSlotStatesInRange(
+  startDate: string,
+  endDate: string
+): Promise<Record<string, { sabah: SlotState; aksam: SlotState }>> {
+  const sql = getDb();
+  const rows = await sql`
+    SELECT date, slot, status FROM reservations
+    WHERE date >= ${startDate} AND date <= ${endDate} AND status != 'iptal'
+  `;
+  const result: Record<string, { sabah: SlotState; aksam: SlotState }> = {};
+  for (const row of rows as { date: string | Date; slot: Slot; status: Status }[]) {
+    const dateKey = typeof row.date === "string" ? row.date.slice(0, 10) : row.date.toISOString().slice(0, 10);
+    if (!result[dateKey]) result[dateKey] = { sabah: "musait", aksam: "musait" };
+    result[dateKey][row.slot] = row.status === "onaylandi" ? "dolu" : "beklemede";
+  }
+  return result;
+}
+
 export async function createReservation(
   data: Omit<Reservation, "id" | "status" | "created_at">
 ): Promise<Reservation> {
