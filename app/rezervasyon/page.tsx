@@ -263,7 +263,7 @@ export default function ReservasyonPage() {
                   onChange={(e) => setForm((f) => ({ ...f, guestCount: e.target.value }))}
                   className="w-full px-4 py-3 rounded-xl outline-none"
                   style={{ backgroundColor: "#EDE0C4", fontFamily: "var(--font-inter)", border: "none" }}>
-                  {Array.from({ length: 21 }, (_, i) => i + 10).map((n) => (
+                  {Array.from({ length: 16 }, (_, i) => i + 10).map((n) => (
                     <option key={n} value={n}>{n} kişi</option>
                   ))}
                 </select>
@@ -273,7 +273,7 @@ export default function ReservasyonPage() {
                     {pricePerGuest(Number(form.guestCount)) * Number(form.guestCount)}₺
                   </span>
                   <div className="text-xs opacity-50 mt-0.5">
-                    10-15 kişi: 700₺/kişi · 16-30 kişi: 600₺/kişi
+                    10-15 kişi: 700₺/kişi · 16-25 kişi: 600₺/kişi
                   </div>
                 </div>
               </div>
