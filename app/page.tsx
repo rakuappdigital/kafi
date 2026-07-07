@@ -67,7 +67,7 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <FeatureCard icon="☕" title="Özel Kahveler" desc="Single origin ve özenle hazırlanmış içecekler" />
-            <FeatureCard icon="🌿" title="Sıcak Atmosfer" desc="Turuncu duvarlar, yeşil bitkiler, doğal ışık" />
+            <FeatureCard icon="🌿" title="Sıcak Atmosfer" desc="Sıcak atmosfer, butik tasarım ve ev rahatlığı" />
             <FeatureCard icon="🥪" title="Ev Yapımı Lezzetler" desc="Taze sandviçler ve günlük tatlılar" />
             <FeatureCard icon="📅" title="Özel Etkinlik" desc="Günde 2 slot, tamamen size özel" />
           </div>
@@ -198,7 +198,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="py-6 px-6 border-t text-center opacity-30 text-xs"
         style={{ borderColor: "#C8622A33", fontFamily: "var(--font-inter)", backgroundColor: "#1a1a1a", color: "#F5EDD8" }}>
-        © 2024 Kafi Coffee House
+        © 2019 Kafi Coffee House
       </footer>
     </main>
   );
