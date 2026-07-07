@@ -39,6 +39,49 @@ function pricePerGuest(guestCount: number) {
   return guestCount <= 15 ? 700 : 600;
 }
 
+function isValidPhone(phone: string) {
+  const digits = phone.replace(/[\s-]/g, "");
+  return /^0\d{10}$/.test(digits);
+}
+
+const SPAM_EMAIL_DOMAINS = [
+  "mailinator.com", "tempmail.com", "temp-mail.org", "guerrillamail.com",
+  "10minutemail.com", "throwawaymail.com", "yopmail.com", "sharklasers.com",
+  "trashmail.com", "getnada.com", "fakeinbox.com", "dispostable.com",
+  "maildrop.cc", "33mail.com", "mintemail.com", "mailnesia.com", "test.com",
+  "example.com",
+];
+
+function isValidEmail(email: string) {
+  const basicFormat = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  if (!basicFormat) return false;
+  const domain = email.split("@")[1]?.toLowerCase() ?? "";
+  return !SPAM_EMAIL_DOMAINS.some((d) => domain === d || domain.endsWith("." + d));
+}
+
+const BLOCKED_WORDS = [
+  "amk", "aq", "siktir", "orospu", "piç", "yavşak", "ibne", "göt herif",
+  "öldür", "öldürürüm", "keserim", "bıçaklarım", "patlatırım", "vururum",
+  "gebertirim", "silah", "bomba", "tecavüz",
+];
+
+function containsBlockedContent(note: string) {
+  const normalized = note.toLocaleLowerCase("tr-TR");
+  return BLOCKED_WORDS.some((w) => normalized.includes(w));
+}
+
+function looksLikeGibberish(note: string) {
+  const words = note.trim().split(/\s+/).filter((w) => w.length > 5);
+  if (words.length === 0) return false;
+  const vowels = "aeıioöuü";
+  const gibberishCount = words.filter((w) => {
+    const lower = w.toLocaleLowerCase("tr-TR");
+    const vowelCount = [...lower].filter((ch) => vowels.includes(ch)).length;
+    return vowelCount / lower.length < 0.15;
+  }).length;
+  return gibberishCount / words.length > 0.5;
+}
+
 export default function ReservasyonPage() {
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [selectedMonth, setSelectedMonth] = useState<0 | 1>(0);
@@ -76,8 +119,26 @@ export default function ReservasyonPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!selectedDate || !selectedSlot) return;
-    setSubmitting(true);
     setError("");
+
+    if (!isValidPhone(form.phone)) {
+      setError("Lütfen 0 ile başlayan 11 haneli geçerli bir cep telefonu numarası girin.");
+      return;
+    }
+    if (!isValidEmail(form.email)) {
+      setError("Lütfen geçerli bir e-posta adresi girin. Geçici/spam mail adresleri kabul edilmiyor.");
+      return;
+    }
+    if (form.note && containsBlockedContent(form.note)) {
+      setError("Not kısmında uygun olmayan bir ifade tespit edildi. Lütfen notunuzu düzenleyin.");
+      return;
+    }
+    if (form.note && looksLikeGibberish(form.note)) {
+      setError("Not kısmına anlamlı bir açıklama girin.");
+      return;
+    }
+
+    setSubmitting(true);
     try {
       const res = await fetch("/api/reservations", {
         method: "POST",
@@ -307,7 +368,8 @@ export default function ReservasyonPage() {
               <Field label="Ad Soyad / Organizasyon *" value={form.name}
                 onChange={(v) => setForm((f) => ({ ...f, name: v }))} placeholder="Adınız veya organizasyon adı" required />
               <Field label="Cep Telefonu *" value={form.phone} type="tel"
-                onChange={(v) => setForm((f) => ({ ...f, phone: v }))} placeholder="05xx xxx xx xx" required />
+                onChange={(v) => setForm((f) => ({ ...f, phone: v }))} placeholder="05xx xxx xx xx" required
+                hint="0 ile başlayan 11 haneli numaranızı giriniz" />
               <Field label="E-posta *" value={form.email} type="email"
                 onChange={(v) => setForm((f) => ({ ...f, email: v }))} placeholder="ornek@mail.com" required />
               <div>
@@ -391,9 +453,9 @@ export default function ReservasyonPage() {
   );
 }
 
-function Field({ label, value, onChange, placeholder, type = "text", required }: {
+function Field({ label, value, onChange, placeholder, type = "text", required, hint }: {
   label: string; value: string; onChange: (v: string) => void;
-  placeholder?: string; type?: string; required?: boolean;
+  placeholder?: string; type?: string; required?: boolean; hint?: string;
 }) {
   return (
     <div>
@@ -402,6 +464,9 @@ function Field({ label, value, onChange, placeholder, type = "text", required }:
         placeholder={placeholder} required={required}
         className="w-full px-4 py-3 rounded-xl outline-none"
         style={{ backgroundColor: "#EDE0C4", fontFamily: "var(--font-inter)", border: "none" }} />
+      {hint && (
+        <div className="text-xs opacity-50 mt-1" style={{ fontFamily: "var(--font-inter)" }}>{hint}</div>
+      )}
     </div>
   );
 }
