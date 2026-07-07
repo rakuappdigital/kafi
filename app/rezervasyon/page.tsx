@@ -326,6 +326,24 @@ export default function ReservasyonPage() {
             </button>
           </form>
         )}
+
+        <div className="mt-10 p-4 rounded-xl text-sm opacity-60 flex flex-col gap-2"
+          style={{ backgroundColor: "#EDE0C4", fontFamily: "var(--font-inter)" }}>
+          <p>
+            Seçtiğiniz slotta bekleyen talep görünüyorsa daha sonra tekrar deneyebilir ya da{" "}
+            <a href="mailto:kaficoffeehouse@gmail.com" className="underline" style={{ color: "#C8622A" }}>
+              kaficoffeehouse@gmail.com
+            </a>{" "}
+            adresinden bize ulaşıp bilgi alabilirsiniz.
+          </p>
+          <p>
+            Rezervasyonla ilgili sorularınız için bize{" "}
+            <a href="mailto:kaficoffeehouse@gmail.com" className="underline" style={{ color: "#C8622A" }}>
+              kaficoffeehouse@gmail.com
+            </a>{" "}
+            adresinden ulaşabilirsiniz.
+          </p>
+        </div>
       </div>
     </div>
   );
