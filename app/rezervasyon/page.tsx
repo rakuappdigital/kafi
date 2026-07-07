@@ -27,6 +27,10 @@ function getNext14Days() {
   return days;
 }
 
+function pricePerGuest(guestCount: number) {
+  return guestCount < 15 ? 700 : 600;
+}
+
 export default function ReservasyonPage() {
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [selectedDate, setSelectedDate] = useState("");
@@ -263,6 +267,15 @@ export default function ReservasyonPage() {
                     <option key={n} value={n}>{n} kişi</option>
                   ))}
                 </select>
+                <div className="mt-2 text-sm opacity-60" style={{ fontFamily: "var(--font-inter)" }}>
+                  Kişi başı {pricePerGuest(Number(form.guestCount))}₺ · Toplam{" "}
+                  <span className="font-medium" style={{ color: "#C8622A" }}>
+                    {pricePerGuest(Number(form.guestCount)) * Number(form.guestCount)}₺
+                  </span>
+                  <div className="text-xs opacity-50 mt-0.5">
+                    10-14 kişi: 700₺/kişi · 15+ kişi: 600₺/kişi
+                  </div>
+                </div>
               </div>
               <div>
                 <label className="block text-sm mb-2 opacity-60" style={{ fontFamily: "var(--font-inter)" }}>
