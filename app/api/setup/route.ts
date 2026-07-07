@@ -24,5 +24,14 @@ export async function GET(req: NextRequest) {
     )
   `;
 
-  return NextResponse.json({ ok: true, message: "Tablo hazır" });
+  // Aynı gün+slot için birden fazla aktif (iptal edilmemiş) rezervasyonu
+  // veritabanı seviyesinde engeller — iki kişinin aynı anda aynı slotu
+  // rezerve etme yarışını (race condition) önler.
+  await sql`
+    CREATE UNIQUE INDEX IF NOT EXISTS reservations_date_slot_active_idx
+    ON reservations (date, slot)
+    WHERE status != 'iptal'
+  `;
+
+  return NextResponse.json({ ok: true, message: "Tablo ve index hazır" });
 }

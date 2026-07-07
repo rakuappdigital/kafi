@@ -16,6 +16,13 @@ function formatDateTR(dateStr: string) {
   return d.toLocaleDateString("tr-TR", { weekday: "long", day: "numeric", month: "long" });
 }
 
+function toDateKey(d: Date) {
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 function getMonthLabel(monthOffset: number) {
   const today = new Date();
   const d = new Date(today.getFullYear(), today.getMonth() + monthOffset, 1);
@@ -30,7 +37,7 @@ function getMonthDays(monthOffset: number) {
   const startDay = monthOffset === 0 ? today.getDate() + 1 : 1;
   const days: string[] = [];
   for (let day = startDay; day <= daysInMonth; day++) {
-    days.push(new Date(year, month, day).toISOString().split("T")[0]);
+    days.push(toDateKey(new Date(year, month, day)));
   }
   return days;
 }

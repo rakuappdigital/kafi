@@ -58,16 +58,30 @@ export async function getSlotStatesInRange(
   return result;
 }
 
+export class SlotConflictError extends Error {
+  constructor() {
+    super("Bu slot az önce başka biri tarafından rezerve edildi");
+    this.name = "SlotConflictError";
+  }
+}
+
 export async function createReservation(
   data: Omit<Reservation, "id" | "status" | "created_at">
 ): Promise<Reservation> {
   const sql = getDb();
-  const rows = await sql`
-    INSERT INTO reservations (date, slot, name, phone, email, guest_count, note, status)
-    VALUES (${data.date}, ${data.slot}, ${data.name}, ${data.phone}, ${data.email}, ${data.guest_count}, ${data.note}, 'beklemede')
-    RETURNING *
-  `;
-  return rows[0] as Reservation;
+  try {
+    const rows = await sql`
+      INSERT INTO reservations (date, slot, name, phone, email, guest_count, note, status)
+      VALUES (${data.date}, ${data.slot}, ${data.name}, ${data.phone}, ${data.email}, ${data.guest_count}, ${data.note}, 'beklemede')
+      RETURNING *
+    `;
+    return rows[0] as Reservation;
+  } catch (err) {
+    if (err && typeof err === "object" && "code" in err && err.code === "23505") {
+      throw new SlotConflictError();
+    }
+    throw err;
+  }
 }
 
 export async function deleteReservation(id: string): Promise<void> {

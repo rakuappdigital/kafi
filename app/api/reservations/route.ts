@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getReservations, createReservation, isSlotAvailable, Slot } from "@/lib/reservations";
+import { getReservations, createReservation, isSlotAvailable, Slot, SlotConflictError } from "@/lib/reservations";
 import { sendReservationEmails } from "@/lib/email";
 
 export async function GET(req: NextRequest) {
@@ -47,7 +47,10 @@ export async function POST(req: NextRequest) {
     sendReservationEmails(reservation).catch(() => {});
 
     return NextResponse.json(reservation, { status: 201 });
-  } catch {
+  } catch (err) {
+    if (err instanceof SlotConflictError) {
+      return NextResponse.json({ error: err.message }, { status: 409 });
+    }
     return NextResponse.json({ error: "Sunucu hatası" }, { status: 500 });
   }
 }
