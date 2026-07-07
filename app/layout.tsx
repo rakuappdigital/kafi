@@ -16,8 +16,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "ka-fi | Rezervasyon",
-  description: "ka-fi coffee house — etkinlik rezervasyonu",
+  title: "kaficoffeehouse | Rezervasyon",
+  description: "kaficoffeehouse — etkinlik rezervasyonu",
 };
 
 export default function RootLayout({

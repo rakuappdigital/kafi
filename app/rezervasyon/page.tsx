@@ -186,7 +186,7 @@ export default function ReservasyonPage() {
       {/* Header */}
       <div className="px-6 py-6 flex items-center justify-between border-b" style={{ borderColor: "#C8622A22" }}>
         <Link href="/" className="text-xl font-medium" style={{ fontFamily: "var(--font-playfair)", color: "#C8622A" }}>
-          ka-fi
+          kaficoffeehouse
         </Link>
         <span className="text-sm opacity-40" style={{ fontFamily: "var(--font-inter)" }}>
           Rezervasyon
